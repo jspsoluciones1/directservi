@@ -1,17 +1,20 @@
 {
-	"name": "plantillalibre",
-	"version": "0.0.0",
-	"private": true,
-	"scripts": {
-		"deploy": "wrangler deploy",
-		"dev": "wrangler dev",
-		"start": "wrangler dev"
-	},
-	"devDependencies": {
-		"@supabase/supabase-js": "^2.50.0",
-		"wrangler": "^4.21.0"
-	},
-	"dependencies": {
-		"@supabase/ssr": "^0.6.1"
-	}
+  "name": "plantillalibre",
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "node --watch src/server.js",
+    "start": "node src/server.js",
+    "build": "echo 'No build step required'"
+  },
+  "dependencies": {
+    "@supabase/supabase-js": "^2.50.0",
+    "express": "^4.18.2",
+    "cookie-parser": "^1.4.6",
+    "cors": "^2.8.5",
+    "dotenv": "^16.3.1"
+  },
+  "devDependencies": {
+    "nodemon": "^3.0.2"
+  }
 }

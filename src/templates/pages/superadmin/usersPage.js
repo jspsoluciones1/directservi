@@ -1,18 +1,13 @@
-// /templates/pages/superadmin/usersPage.js
-
-import { escapeHTML } from '../../../utils.js';
+import { escapeHTML } from '../../../utils/utils.js';
 
 /**
  * Renderiza la página de gestión de Administradores para el Superadministrador.
- * @param {Array} businesses - Lista de todos los negocios disponibles para asignar un admin.
- * @param {string|null} message - Un mensaje de éxito o error.
- * @returns {string} El HTML de la página.
  */
 export const SuperAdminUsersPage = (businesses = [], message = null) => {
     const messageHtml = message ? `<div class="alert alert-info">${escapeHTML(message)}</div>` : '';
 
     const businessOptions = businesses
-        .filter(b => b.status === 'active') // Asumimos que solo se pueden asignar admins a negocios activos
+        .filter(b => (b.status || 'active') === 'active')
         .map(b => `<option value="${b.id}">${escapeHTML(b.name)}</option>`)
         .join('');
 

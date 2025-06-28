@@ -1,93 +1,134 @@
-# Plantilla Libre
+# Plantilla Libre - Comparador de Tarifas Energéticas
 
-Este es un proyecto de plantilla libre para una aplicación web server-side rendered (SSR) construida con Cloudflare Workers y Supabase. La aplicación cuenta con un sistema de autenticación y control de acceso basado en roles.
+Un sistema multi-inquilino para comparación de tarifas energéticas en España, construido con Node.js, Express y Supabase.
 
 ## Características
 
-- **Autenticación de Usuarios:** Registro, inicio y cierre de sesión.
-- **Control de Acceso Basado en Roles (RBAC):** Diferentes roles de usuario (superadmin, admin, vendedor, tramitador) con acceso a distintas vistas y funcionalidades.
-- **Renderizado del Lado del Servidor (SSR):** Las páginas HTML se generan en el servidor para un mejor rendimiento y SEO.
-- **Integración con Supabase:** Utiliza Supabase para la base de datos y la autenticación.
-- **Despliegue Sencillo:** Configurado para un despliegue rápido en Cloudflare Workers.
+- **Multi-tenant**: Cada empresa puede tener su propia configuración y usuarios
+- **Control de acceso basado en roles**: Superadmin, Admin, Vendedor, Tramitador
+- **Comparador de tarifas**: Calcula automáticamente las mejores ofertas para cada cliente
+- **Gestión completa**: Usuarios, proveedores, tarifas y propuestas
+- **Personalización**: Cada empresa puede configurar sus colores y logo
+- **Generación de PDF**: Propuestas profesionales en PDF
 
-## Tecnologías Utilizadas
+## Tecnologías
 
-- **Cloudflare Workers:** Plataforma para ejecutar el código del lado del servidor.
-- **Supabase:** Backend como servicio (BaaS) para la base de datos y autenticación.
-- **JavaScript (ESM):** Lenguaje de programación principal.
-- **Wrangler:** Herramienta de línea de comandos para el desarrollo y despliegue de Cloudflare Workers.
-
-## Requisitos Previos
-
-- [Node.js](https://nodejs.org/) (versión 14 o superior)
-- [npm](https://www.npmjs.com/) (generalmente se instala con Node.js)
-- Una cuenta de [Cloudflare](https://www.cloudflare.com/)
-- Instalar o actualizar Wrangler (https://developers.cloudflare.com/workers/wrangler/install-and-update/)(npm i -D wrangler@latest)
-- Una cuenta de [Supabase](https://supabase.com/)
+- **Backend**: Node.js + Express
+- **Base de datos**: Supabase (PostgreSQL)
+- **Frontend**: Bootstrap 5 + Vanilla JavaScript
+- **Autenticación**: Supabase Auth
+- **PDF**: jsPDF + AutoTable
 
 ## Instalación
 
-1.  **Clona el repositorio:**
+1. **Clona el repositorio**
+```bash
+git clone <repository-url>
+cd plantillalibre
+```
 
-    ```bash
-    git clone <URL-del-repositorio>
-    cd plantillalibre
-    ```
+2. **Instala dependencias**
+```bash
+npm install
+```
 
-2.  **Instala las dependencias:**
+3. **Configura variables de entorno**
+```bash
+cp .env.example .env
+```
 
-    ```bash
-    npm install
-    ```
+Edita `.env` con tus credenciales de Supabase:
+```
+SUPABASE_URL=tu_url_de_supabase
+SUPABASE_ANON_KEY=tu_clave_anonima_de_supabase
+PORT=3000
+NODE_ENV=development
+```
 
-3.  **Configura las variables de entorno:**
-
-    Crea un archivo `.dev.vars` en la raíz del proyecto y añade las siguientes variables de entorno de Supabase:
-
-    ```
-    SUPABASE_URL="tu-url-de-supabase"
-    SUPABASE_KEY="tu-anon-key-de-supabase"
-    ```
-
-    Puedes encontrar estas claves en la configuración de tu proyecto de Supabase (Settings > API).
-
-## Uso
-
-Para iniciar el servidor de desarrollo local, ejecuta el siguiente comando:
-
+4. **Inicia el servidor de desarrollo**
 ```bash
 npm run dev
 ```
 
-Esto iniciará un servidor local (generalmente en `http://localhost:8787`) que se recargará automáticamente al guardar cambios en los archivos.
-
-## Despliegue
-
-Para desplegar la aplicación en Cloudflare Workers, ejecuta el siguiente comando:
-
-```bash
-npm run deploy
-```
-
-Este comando empaquetará y desplegará tu aplicación en tu cuenta de Cloudflare.
+La aplicación estará disponible en `http://localhost:3000`
 
 ## Estructura del Proyecto
 
 ```
-.
-├── src/
-│   ├── index.js                # Punto de entrada principal, enrutador y lógica de la aplicación
-│   ├── client-scripts.js       # Scripts para el lado del cliente (si son necesarios)
-│   ├── utils.js                # Funciones de utilidad
-│   ├── services/
-│   │   ├── email.js            # Lógica para el envío de correos (ejemplo)
-│   │   └── supabase.js         # Cliente y funciones de Supabase
-│   └── templates/
-│       ├── layout.js           # Plantilla principal de la aplicación
-│       ├── components/         # Componentes reutilizables
-│       └── pages/              # Plantillas para cada página de la aplicación
-├── .gitignore
-├── package.json                # Dependencias y scripts del proyecto
-├── wrangler.toml               # Configuración de Cloudflare Workers
-└── README.md                   # Este archivo
+src/
+├── server.js              # Servidor principal
+├── routes/                 # Rutas organizadas por rol
+│   ├── auth.js
+│   ├── superadmin.js
+│   ├── admin.js
+│   ├── vendedor.js
+│   └── tramitador.js
+├── services/
+│   └── supabase.js        # Cliente y servicios de Supabase
+├── templates/             # Plantillas HTML
+│   ├── layout.js
+│   └── pages/
+├── utils/
+│   ├── utils.js           # Utilidades generales
+│   └── tariffCalculator.js # Lógica de cálculo de tarifas
+└── public/                # Archivos estáticos
 ```
+
+## Roles y Permisos
+
+### Superadmin
+- Gestiona todas las empresas y compañías
+- Crea administradores para cada negocio
+- Acceso completo al sistema
+
+### Admin (Administrador de Negocio)
+- Gestiona usuarios de su negocio (vendedores, tramitadores)
+- Configura proveedores y tarifas
+- Personaliza apariencia (colores, logo)
+
+### Vendedor
+- Utiliza el comparador de tarifas
+- Genera propuestas para clientes
+- Exporta propuestas a PDF
+
+### Tramitador
+- Gestiona el estado de contratos
+- Procesa documentación
+- Seguimiento de tramitaciones
+
+## Base de Datos
+
+El sistema requiere las siguientes tablas en Supabase:
+
+- `companies` - Empresas/entidades legales
+- `businesses` - Negocios/canales de venta
+- `business_styles` - Configuración de apariencia
+- `roles` - Roles del sistema
+- `user_profiles` - Perfiles de usuario
+- `providers` - Proveedores energéticos
+- `rates` - Tarifas energéticas
+- `proposals` - Propuestas generadas
+
+## Desarrollo
+
+Para desarrollo con recarga automática:
+```bash
+npm run dev
+```
+
+Para producción:
+```bash
+npm start
+```
+
+## Contribuir
+
+1. Fork el proyecto
+2. Crea una rama para tu feature (`git checkout -b feature/AmazingFeature`)
+3. Commit tus cambios (`git commit -m 'Add some AmazingFeature'`)
+4. Push a la rama (`git push origin feature/AmazingFeature`)
+5. Abre un Pull Request
+
+## Licencia
+
+Este proyecto está bajo la Licencia MIT - ver el archivo [LICENSE](LICENSE) para detalles.

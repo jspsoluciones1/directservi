@@ -1,11 +1,7 @@
-// /templates/pages/loginPage.js
-
-import { escapeHTML } from '../../utils.js';
+import { escapeHTML } from '../../utils/utils.js';
 
 /**
  * Renderiza el formulario de inicio de sesión.
- * @param {string | null} error - Un mensaje de error para mostrar, si lo hay.
- * @returns {string} El HTML del formulario de login.
  */
 export const LoginPage = (error = null) => {
   const errorHtml = error ? `<div class="alert alert-danger" role="alert">${escapeHTML(error)}</div>` : '';

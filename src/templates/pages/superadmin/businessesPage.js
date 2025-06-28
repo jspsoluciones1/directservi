@@ -1,29 +1,21 @@
-// /templates/pages/superadmin/businessesPage.js
-
-import { escapeHTML } from '../../../utils.js';
+import { escapeHTML } from '../../../utils/utils.js';
 
 /**
  * Renderiza la página de gestión de Negocios y Compañías para el Superadministrador.
- * @param {Array} companies - Lista de todas las compañías disponibles.
- * @param {Array} businesses - Lista de todos los negocios existentes.
- * @param {string|null} message - Un mensaje de éxito o error para mostrar.
- * @returns {string} El HTML de la página.
  */
 export const SuperAdminBusinessesPage = (companies = [], businesses = [], message = null) => {
     const messageHtml = message ? `<div class="alert alert-info">${escapeHTML(message)}</div>` : '';
 
-    // Opciones del <select> para compañías
     const companyOptions = companies.map(c =>
         `<option value="${c.id}">${escapeHTML(c.name)} (${escapeHTML(c.cif)})</option>`
     ).join('');
 
-    // Filas de la tabla para los negocios existentes
     const businessRows = businesses.map(b => `
         <tr>
             <td>${escapeHTML(b.id)}</td>
             <td><strong>${escapeHTML(b.name)}</strong></td>
             <td>${escapeHTML(b.company?.name || 'N/A')}</td>
-            <td><span class="badge bg-secondary">${escapeHTML(b.status)}</span></td>
+            <td><span class="badge bg-secondary">${escapeHTML(b.status || 'active')}</span></td>
             <td>
                 <a href="#" class="btn btn-sm btn-warning">Editar</a>
             </td>
